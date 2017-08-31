@@ -1,0 +1,48 @@
+<html ng-app="app">
+
+<head>
+    <base href="/">
+    <title>Title</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.js"></script>
+    <script src="controller/app.js"></script>
+</head>
+
+<body ng-controller="appCtrl">
+
+    <div class="chat">
+        <input type="text" ng-model="value"><br>
+        <textarea placeholder="Type your message"></textarea>
+        <button ng-click="click()">Click me</button>
+    </div>
+    <!-- <script src="http://127.0.0.1:808/socket.io/socket.io.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script>
+        (function () {
+
+            var getNode = function (s) {
+              //  console.log(s)
+                return document.querySelector(s);
+            },
+                textarea = getNode('.chat textarea')
+         //   console.log(textarea)
+            socket = io.connect('http://127.0.0.1:8085');
+            socket.on('output', function (data) {
+          //      console.log(data)////
+            });
+            socket.on('status', function (data) {
+                console.log(data)  ///return true messages
+            })
+            textarea.addEventListener('keydown', function (event) {
+                var self = this;
+                if (event.which === 13 && event.shiftKey == false) {
+                    socket.emit('input', {
+                        //name: name,
+                        message: self.value
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>
